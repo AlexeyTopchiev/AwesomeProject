@@ -2,16 +2,11 @@ import React from 'react';
 import styled from 'styled-components/native';
 
 
-export default class LoginScreen extends React.Component {
-
-  static navigationOptions = {
-    header: null
-  }
-
+export default class SignUpScreen extends React.Component {
   render() {
     return (
       <Container>
-        <Button title="Go to the Home Screen" onPress={() => this.props.navigation.navigate('Home')} />
+        <TextStyled>SignUpScreen</TextStyled>
       </Container>
     );
   }
@@ -24,6 +19,7 @@ const Container = styled.View`
   justify-content: center;
 `
 
-const Button = styled.Button`
-  margin-bottom: 10px;
+const TextStyled = styled.Text`
+  color: #000;
+  font-size: 15px;
 `

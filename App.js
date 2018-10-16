@@ -1,114 +1,66 @@
 import React from 'react';
 import styled from 'styled-components/native';
-import { createBottomTabNavigator } from 'react-navigation';
-import  Icon  from 'react-native-vector-icons/Ionicons';
-
-// import LoginScreen from './src/screens/LoginScreen'
-// import HomeScreen from './src/screens/HomeScreen'
-
-export class HomeScreen extends React.Component {
-
-  state = {
-    task: null
-  }
-
-  render() {
-    return (
-      <Container>
-        <TextStyled>
-          Hello!
-        </TextStyled>
-      </Container>
-    )
-  }
-}
-export class SettingsScreen extends React.Component {
-  render() {
-    return (
-      <Container>
-        <TextStyled>
-          Settings
-        </TextStyled>
-      </Container>
-    )
-  }
-}
-export class TasksScreen extends React.Component {
+import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createBottomTabNavigator} from 'react-navigation'
+import { TouchableOpacity } from "react-native"
+import Icon from 'react-native-vector-icons/Ionicons'
+import AuthLoadingScreen from './src/screens/AuthLoadingScreen'
+import WelcomeScreen from './src/screens/WelcomeScreen'
+import SignInScreen from './src/screens/SignInScreen'
+import SignUpScreen from './src/screens/SignUpScreen'
+import HomeScreen from './src/screens/HomeScreen'
+import SettingsScreen from './src/screens/SettingsScreen'
 
 
-  render() {
-    return (
-      <Container>
-        {/* <TextStyled>
-          Tasks
-        </TextStyled> */}
-        <Input />
-        <Button title="Сохранить" onPress={() => {}}/>
-      </Container>
-    )
-  }
-}
 
-export default createBottomTabNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-      tabBarLabel: 'Home',
-      tabBarIcon: ({tintColor}) => (
-        <Icon name="ios-home" color={tintColor} size={24}/>
+
+const AuthStackNavigator = createStackNavigator({
+  Welcome: WelcomeScreen,
+  SignIn: SignInScreen,
+  SignUp: SignUpScreen
+})
+
+const AppTabNavigator = createBottomTabNavigator({
+  HomeScreen: {
+    screen: HomeScreen
+  },
+  SettingsScreen: {
+    screen: SettingsScreen
+  },
+})
+
+const AppStackNavigator = createStackNavigator({
+  AppTabNavigator: {
+    screen: AppTabNavigator,
+    navigationOptions: ({navigation}) => ({
+      title: 'Your App',
+      headerLeft: (
+        <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
+          <Container>
+            <Icon name="md-menu" size={24} />
+          </Container>
+        </TouchableOpacity>
       )
-    }
-  },
-  Settings: {
-    screen: SettingsScreen,
-    navigationOptions: {
-      tabBarLabel: 'Settings',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-settings" color={tintColor} size={24} />
-      )
-    }
-  },
-  // Profile: {
-  //   screen: SettingsScreen,
-  //   navigationOptions: {
-  //     tabBarLabel: 'Profile',
-  //     tabBarIcon: ({ tintColor }) => (
-  //       <Icon name="ios-settings" color={tintColor} size={24} />
-  //     )
-  //   }
-  // },
-  Tasks: {
-    screen: TasksScreen,
-    navigationOptions: {
-      tabBarLabel: 'Tasks',
-      tabBarIcon: ({ tintColor }) => (
-        <Icon name="ios-settings" color={tintColor} size={24} />
-      )
-    }
-  },
-}, { //router confing
-    initialRouteName: 'Tasks',
-    // order: ['Home', 'Settings, Tasks'],
-  //navigation for complete tab navigator
-  navigationOptions: {
-    tabBarVisible: true
-  },
-  tabBarOptions: {
-    activeTintColor: 'orange',
-    inactiveTintColor: 'grey'
+    })
   }
 })
 
-// const AppStackNavigator = createStackNavigator({
-//   Login: LoginScreen,
-//   Home: HomeScreen
-// })
+const AppDrawNavigator = createDrawerNavigator({
+  Home: AppStackNavigator
+})
+
+export default createSwitchNavigator({
+  AuthLoading: AuthLoadingScreen,
+  Auth: AuthStackNavigator,
+  App: AppDrawNavigator
+})
+
 
 const Container = styled.View`
   flex: 1;
   background-color: #fff;
   align-items: center;
   justify-content: center;
+  padding-left: 10px;
 `
 
 const TextStyled = styled.Text`
@@ -125,5 +77,3 @@ const Input = styled.TextInput`
 const Button = styled.Button`
   
 `
-
-// AppRegistry.registerComponent('App', () => mainNavigator);
